@@ -1,7 +1,13 @@
-﻿using System.Diagnostics;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace TextbookDownloader;
+
+internal readonly struct Book(string id, IEnumerable<string> tags, string title)
+{
+    public readonly string Id = id;
+    public readonly IEnumerable<string> Tags = tags;
+    public readonly string Title = title;
+}
 
 internal static class Program
 {
@@ -13,16 +19,43 @@ internal static class Program
         return JsonDocument.Parse(bookInformationJsonUrlsJson);
     }
 
-    public static bool IsChineseCharacter(char c)
+    private static IEnumerable<string> GetTags(JsonElement.ArrayEnumerator tagJsonList, JsonElement tagsTreeNode)
     {
-        var codePoint = char.ConvertToUtf32(c.ToString(), 0);
+        var result = new List<string>();
 
-        // BMP中的中文字符和SMP中的中文字符
-        return codePoint is >= 0x4E00 and <= 0x9FFF or >= 0x20000 and <= 0x215FF;
+        var queue = new Queue<JsonElement>();
+        queue.Enqueue(tagsTreeNode);
+
+        while (queue.Count > 0)
+        {
+            var current = queue.Dequeue();
+
+            if (current.TryGetProperty("tag_id", out var tagTreeNodeIdJson) && tagJsonList.Any(tagJson =>
+                    tagJson.GetProperty("tag_id").GetString() == tagTreeNodeIdJson.GetString()))
+            {
+                result.Add(current.GetProperty("tag_name").GetString()!);
+            }
+
+            var hierarchiesJson = current.GetProperty("hierarchies");
+            if (hierarchiesJson.ValueKind == JsonValueKind.Null)
+            {
+                continue;
+            }
+
+            var children = hierarchiesJson.EnumerateArray().First().GetProperty("children").EnumerateArray();
+            foreach (var child in children)
+            {
+                queue.Enqueue(child);
+            }
+        }
+
+        return result;
     }
 
     private static async Task Main(string[] args)
     {
+        var tagsJson = await GetJsonAsync("https://s-file-1.ykt.cbern.com.cn/zxx/ndrs/tags/tch_material_tag.json");
+
         var bookInformationJsonListUrlsJson =
             await GetJsonAsync(
                 "https://s-file-2.ykt.cbern.com.cn/zxx/ndrs/resources/tch_material/version/data_version.json");
@@ -33,17 +66,12 @@ internal static class Program
             let bookInformationListJson = GetJsonAsync(bookInformationListJsonUrl).Result
             from bookInformationJson in bookInformationListJson.RootElement.EnumerateArray()
             let id = bookInformationJson.GetProperty("id").GetString()
-            let labelJsonList = bookInformationJson.GetProperty("label").EnumerateArray()
-            let labels = from labelJson in labelJsonList
-                select labelJson.GetString()
-            let label = labels.First(label =>
-            {
-                Debugger.Log(0, null, label);
-                return IsChineseCharacter(label[0]);
-            })
-            let tags = label.Split(' ')
-            select new KeyValuePair<string, IEnumerable<string>>(id, tags);
+            let tagJsonList = bookInformationJson.GetProperty("tag_list").EnumerateArray()
+            let tags = GetTags(tagJsonList, tagsJson.RootElement)
+            let title = bookInformationJson.GetProperty("title").GetString()
+            select new Book(id, tags, title);
 
-        Console.WriteLine(string.Join(',', booksInformation.Select(pair => (pair.Key, string.Join(' ', pair.Value)))));
+        Console.WriteLine(string.Join(',',
+            booksInformation.Select(book => $"id:{book.Id};tags:{string.Join(' ', book.Tags)};title:{book.Title}\n")));
     }
 }
