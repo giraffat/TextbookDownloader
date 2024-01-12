@@ -1,0 +1,14 @@
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\bin\Debug\net8.0\TextbookDownloader.exe
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\bin\Debug\net8.0\TextbookDownloader.deps.json
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\bin\Debug\net8.0\TextbookDownloader.runtimeconfig.json
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\bin\Debug\net8.0\TextbookDownloader.dll
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\bin\Debug\net8.0\TextbookDownloader.pdb
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\TextbookDownloader.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\TextbookDownloader.AssemblyInfoInputs.cache
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\TextbookDownloader.AssemblyInfo.cs
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\TextbookDownloader.csproj.CoreCompileInputs.cache
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\TextbookDownloader.dll
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\refint\TextbookDownloader.dll
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\TextbookDownloader.pdb
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\TextbookDownloader.genruntimeconfig.cache
+C:\Users\giraf\Documents\Code\TextbookDownloader\TextbookDownloader\obj\Debug\net8.0\ref\TextbookDownloader.dll
